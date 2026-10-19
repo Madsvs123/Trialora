@@ -1,0 +1,17 @@
+import { Navigate, Outlet, useLocation } from 'react-router-dom'
+import { Spinner } from '../ui'
+import { useAuth } from '../../hooks/useAuth'
+
+export function ProtectedRoute() {
+  const { isAuthenticated, loading } = useAuth()
+  const location = useLocation()
+  if (loading) {
+    return (
+      <div style={{ minHeight: '100vh', display: 'grid', placeItems: 'center' }}>
+        <Spinner label="Opening workspace…" />
+      </div>
+    )
+  }
+  if (!isAuthenticated) return <Navigate to="/login" replace state={{ from: location.pathname }} />
+  return <Outlet />
+}
